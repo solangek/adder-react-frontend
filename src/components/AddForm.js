@@ -1,27 +1,60 @@
-import {useState} from "react";
+// src/components/AddForm.js
+import { useState } from "react";
+import { apiCall } from "../utils/api";
 
-export default function AddForm({url, receiveResult}) {
-    const [operand1, setOperand1] = useState("");
-    const [operand2, setOperand2] = useState("");
+/**
+ * A simple form for adding two numbers
+ * @param url the url to send the request to
+ * @param receiveResult a function to receive the result from the server
+ * @param handleError a function to handle errors
+ * @returns {JSX.Element}
+ */
+function AddForm({ url, receiveResult, handleError }) {
+    const [operands, setOperands] = useState({ operand1: "", operand2: "" });
 
-    function handleSubmit(e) {
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setOperands((prev) => ({ ...prev, [id]: value }));
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({operand1: operand1, operand2: operand2})
-        })
-            .then(response => response.json())
-            .then(json => receiveResult(json));
-    }
+        receiveResult("");
+        handleError("");
+
+        try {
+            const result = await apiCall(url, "POST", operands);
+            receiveResult(result);
+        } catch (error) {
+            handleError(error);
+        }
+    };
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="number" value={operand1} onChange={e => setOperand1(e.target.value)}/>
-            <input type="number" value={operand2} onChange={e => setOperand2(e.target.value)}/>
-            <button type="submit">Add</button>
+            <div className="mb-3">
+                <label htmlFor="operand1" className="form-label">Number 1</label>
+                <input
+                    type="number"
+                    className="form-control"
+                    id="operand1"
+                    value={operands.operand1}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="operand2" className="form-label">Number 2</label>
+                <input
+                    type="number"
+                    className="form-control"
+                    id="operand2"
+                    value={operands.operand2}
+                    onChange={handleChange}
+                />
+            </div>
+            <button type="submit" className="btn btn-primary">Add</button>
         </form>
     );
 }
+
+export default AddForm;
