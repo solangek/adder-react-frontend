@@ -23,7 +23,12 @@ function AddForm({ url, receiveResult, handleError }) {
         handleError("");
 
         try {
-            const result = await apiCall(url, "POST", operands);
+            //url = url + `/a/${operands.operand1}/b/${operands.operand2}`;
+            const result = await apiCall(url, "POST",   {
+                operand1: Number(operands.operand1),
+                operand2: Number(operands.operand2),
+                operation: operands.operation || "+"
+            });
             receiveResult(result);
         } catch (error) {
             handleError(error);
@@ -49,6 +54,16 @@ function AddForm({ url, receiveResult, handleError }) {
                     className="form-control"
                     id="operand2"
                     value={operands.operand2}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="operand2" className="form-label">Operation</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    id="operation"
+                    value={operands.operation || "+"}
                     onChange={handleChange}
                 />
             </div>

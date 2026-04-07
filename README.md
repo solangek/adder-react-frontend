@@ -1,75 +1,48 @@
-# A front end to a Spring backend REST api
+# Frontend for a Spring REST API (Vite + React)
 
-Look for adder-spring-backend in my repo for the backend code.
-NOTE that the front end must include a proxy to the backend to avoid CORS issues.
-The package.json file includes the following:
-```json
-  "proxy": "http://localhost:8080",
+This project is a React frontend for a Spring backend (see `adder-spring-backend` in the same repo collection).
+
+The frontend is now powered by Vite.
+
+## Development
+
+Install dependencies:
+
+```bash
+npm install
 ```
 
-## Available Scripts
+Start the dev server:
 
-In the project directory, you can run:
+```bash
+npm run dev
+```
 
-### `npm start`
+The app runs at [http://localhost:3000](http://localhost:3000).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Spring backend integration
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+By default, API calls use `/api/...` paths.
 
-### `npm test`
+- In development, Vite proxies `/api` to `http://localhost:8080` (configured in `vite.config.js`), which avoids CORS issues.
+- In production, serve the frontend and backend behind the same host/reverse proxy, or set `VITE_API_BASE_URL` to your backend URL.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Optional environment override:
 
-### `npm run build`
+```bash
+VITE_API_BASE_URL=http://localhost:8080
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+You can put this in a `.env.local` file for local use.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Scripts
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `npm run dev` (or `npm start`): start Vite dev server
+- `npm run build`: create production build in `dist/`
+- `npm run preview`: preview production build locally
+- `npm test`: run tests with Vitest
 
-### `npm run eject`
+## Notes
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Entry HTML is now `index.html` at the project root (Vite convention).
+- The old CRA `proxy` field in `package.json` is replaced by `server.proxy` in `vite.config.js`.

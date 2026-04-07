@@ -1,6 +1,5 @@
-import logo from './logo.svg';
 import './App.css';
-import AddForm from "./components/AddForm";
+import AddForm from "./components/AddForm.jsx";
 import {useState} from "react";
 
 /**
@@ -11,6 +10,7 @@ import {useState} from "react";
 function App() {
   const [result, setResult] = useState("");
   const [error, setError] = useState("");
+  const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
     /**
      * A function to receive the result from the server and set it to the state
@@ -35,7 +35,7 @@ function App() {
             This is a simple form submission example using React. The form takes two numbers and adds them together. The result is displayed below the form.
             The form is submitted using the Fetch API implemented with Spring (you must run the Spring backend in parallel). The result is received from the server and displayed below the form.
         </p>
-      <AddForm url={"/api/add"} receiveResult={receiveResultFromServer} handleError={handleError}/>
+      <AddForm url={`${apiBaseUrl}/api/add`} receiveResult={receiveResultFromServer} handleError={handleError}/>
       {result ? <div className="mt-3">Result is {result}</div> : ""}
       {error ? <div className="mt=3">Error : {error}</div> : ""}
     </div>
@@ -43,3 +43,4 @@ function App() {
 }
 
 export default App;
+
